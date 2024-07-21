@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import TodoTypes from "../todo";
 import TodoService from "../TodoService";
 import { FaCheck, FaEdit } from "react-icons/fa";
 import { GiCancel } from "react-icons/gi";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 import TodoForm from "./TodoForm";
+import "../CSS/TodoList.css";
 
 const TodoList = () => {
   const [todos, setTodos] = useState<TodoTypes[]>(TodoService.getTodos());
@@ -39,6 +40,15 @@ const TodoList = () => {
     }
   };
 
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    id: number
+  ) => {
+    if (e.key === "Enter") {
+      handleEditSave(id);
+    }
+  };
+
   // delete todo
   const handleDeleteTodo = (id: number) => {
     TodoService.deleteTodo(id);
@@ -59,6 +69,7 @@ const TodoList = () => {
                   type="text"
                   value={editedTodoText}
                   onChange={(e) => setEditedTodoText(e.target.value)}
+                  onKeyDown={(e) => handleKeyDown(e, todo.id)}
                   autoFocus={true}
                 />
                 <button onClick={() => handleEditSave(todo.id)}>
